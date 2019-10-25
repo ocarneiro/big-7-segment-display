@@ -34,7 +34,7 @@ Seven_Segment_Pixel display1 =
                         PIN, NEO_RGB + NEO_KHZ800);
 
 // Modo debug = imprime na porta serial
-const boolean modo_debug = false;
+const boolean modo_debug = true;
 
 // Tamanho total da contagem
 // Ao final da contagem, reinicia daqui
@@ -52,9 +52,9 @@ void setup() {
 void loop() {
 
   int minutos = contagem / 60;
-  int dezenas_de_segundos = (contagem - minutos * 60) / 10;
-  int unidades_de_segundos =
-      contagem - (minutos * 60) - (dezenas_de_segundos * 10);
+  int segundos = contagem % 60; // resto da divisão por 60
+  int dezenas_de_segundos = segundos / 10;
+  int unidades_de_segundos = segundos % 10;
 
   if (DIGITS > 2) {
       display1.updateDigit(1, minutos, 255, 0, 0);
