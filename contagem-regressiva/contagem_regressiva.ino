@@ -51,13 +51,16 @@ void setup() {
 
 void loop() {
 
-  int minutos = contagem / 60;
-  int segundos = contagem % 60; // resto da divisão por 60
-  int dezenas_de_segundos = segundos / 10;
-  int unidades_de_segundos = segundos % 10;
+  uint8_t minutos = contagem / 60;
+  uint8_t dezenas_de_minutos = minutos / 10;
+  uint8_t unidades_de_minutos = minutos % 10;
+  
+  uint8_t segundos = contagem % 60; // resto da divisão por 60
+  uint8_t dezenas_de_segundos = segundos / 10;
+  uint8_t unidades_de_segundos = segundos % 10;
 
   if (DIGITS > 2) {
-      display1.updateDigit(1, minutos, 255, 0, 0);
+      display1.updateDigit(1, unidades_de_minutos, 255, 0, 0);
       display1.updateDigit(2, dezenas_de_segundos, 255, 0, 0);
       display1.updateDigit(3, unidades_de_segundos, 255, 0, 0);
   } else if (DIGITS > 1) {
