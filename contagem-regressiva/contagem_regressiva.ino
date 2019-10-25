@@ -35,12 +35,13 @@ Seven_Segment_Pixel display1 =
 
 // Tamanho total da contagem
 // Ao final da contagem, reinicia daqui
-const int contagem_inicial = 9; // em segundos
+const int contagem_inicial = 90; // em segundos
 
 int contagem = contagem_inicial;
 
 void setup() {
   display1.begin(); // Inicializa os NeoPixels
+  Serial.begin(9600); // Inicializa comunicação serial
 }
 
 void loop() {
@@ -72,8 +73,12 @@ void loop() {
     }
   }
 
-
   display1.show();
+  Serial.print("Faltam: ");
+  Serial.print(minutos);
+  Serial.print(':');
+  Serial.print(dezenas_de_segundos);
+  Serial.println(unidades_de_segundos);
 
   delay(1000); // espera 1 segundo
   contagem--;  // reduz a contagem
