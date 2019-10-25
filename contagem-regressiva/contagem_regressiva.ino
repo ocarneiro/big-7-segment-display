@@ -28,6 +28,16 @@
 // Quantos pixels por delimitador?
 #define PIXPERDELIM 0
 
+// valores de referencia
+// 60 * 60 * 24
+const long SEGUNDOS_EM_UM_DIA = 86400;
+
+// 60 * 60
+const long SEGUNDOS_EM_UMA_HORA = 3600;
+
+const int SEGUNDOS_EM_UM_MINUTO = 60;
+
+
 // Inicialização do display pela biblioteca Seven_Segment_Pixel
 Seven_Segment_Pixel display1 =
     Seven_Segment_Pixel(DIGITS, PIXPERSEG, NUMDELIMS, PIXPERDELIM, NUMPIXELS,
@@ -36,13 +46,20 @@ Seven_Segment_Pixel display1 =
 // Modo debug = imprime na porta serial
 const boolean modo_debug = true;
 
-// Tamanho total da contagem
-// Ao final da contagem, reinicia daqui
-const int contagem_inicial = 70; // em segundos
-
-int contagem = contagem_inicial;
+long contagem;
+long contagem_inicial;
 
 void setup() {
+  // Tamanho total da contagem
+  // Ao final da contagem, reinicia daqui
+  contagem_inicial = SEGUNDOS_EM_UM_DIA * 3; /* dias */
+  contagem_inicial += SEGUNDOS_EM_UMA_HORA * 12; /* horas */
+  contagem_inicial += SEGUNDOS_EM_UM_MINUTO * 29; /* minutos */
+  contagem_inicial += 13; /* segundos */
+  
+  contagem = contagem_inicial;
+
+  
   display1.begin(); // Inicializa os NeoPixels
   if (modo_debug) {
     Serial.begin(9600); // Inicializa comunicação serial
@@ -51,11 +68,21 @@ void setup() {
 
 void loop() {
 
-  uint8_t minutos = contagem / 60;
+  uint8_t dias = contagem / SEGUNDOS_EM_UM_DIA;
+  uint8_t dezenas_de_dias = dias / 10;
+  uint8_t unidades_de_dias = dias % 10;
+
+  long segundos_no_dia = contagem % SEGUNDOS_EM_UM_DIA;
+  uint8_t horas = segundos_no_dia / SEGUNDOS_EM_UMA_HORA;
+  uint8_t dezenas_de_horas = horas / 10;
+  uint8_t unidades_de_horas = horas % 10;
+
+  int segundos_na_hora = segundos_no_dia % SEGUNDOS_EM_UMA_HORA;
+  uint8_t minutos = segundos_na_hora / SEGUNDOS_EM_UM_MINUTO;
   uint8_t dezenas_de_minutos = minutos / 10;
   uint8_t unidades_de_minutos = minutos % 10;
   
-  uint8_t segundos = contagem % 60; // resto da divisão por 60
+  uint8_t segundos = contagem % SEGUNDOS_EM_UM_MINUTO;
   uint8_t dezenas_de_segundos = segundos / 10;
   uint8_t unidades_de_segundos = segundos % 10;
 
@@ -84,7 +111,12 @@ void loop() {
   display1.show();
 
   if (modo_debug) {
-    String texto = "Faltam: " + String(minutos) + ":" + String(dezenas_de_segundos) + String(unidades_de_segundos);
+    // Serial.println(segundos_no_dia);
+    String texto = "Faltam: " 
+                 + String(dezenas_de_dias) + String(unidades_de_dias) + " dias, "
+                 + String(dezenas_de_horas) + String(unidades_de_horas) + " horas, "
+                 + String(dezenas_de_minutos) + String(unidades_de_minutos) + " minutos e "
+                 + String(dezenas_de_segundos) + String(unidades_de_segundos) + " segundos.";
     Serial.println(texto);
   }
 
