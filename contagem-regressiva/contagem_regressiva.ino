@@ -86,11 +86,35 @@ void loop() {
   uint8_t dezenas_de_segundos = segundos / 10;
   uint8_t unidades_de_segundos = segundos % 10;
 
-  if (DIGITS > 2) {
+  if (DIGITS > 7) {
+      display1.updateDigit(1, dezenas_de_dias, 255, 0, 0);
+      display1.updateDigit(2, unidades_de_dias, 255, 0, 0);
+      display1.updateDigit(3, dezenas_de_horas, 255, 0, 0);
+      display1.updateDigit(4, unidades_de_horas, 255, 0, 0);
+      display1.updateDigit(5, dezenas_de_minutos, 255, 0, 0);
+      display1.updateDigit(6, unidades_de_minutos, 255, 0, 0);
+      display1.updateDigit(7, dezenas_de_segundos, 255, 0, 0);
+      display1.updateDigit(8, unidades_de_segundos, 255, 0, 0);
+  } else if (DIGITS >= 7) {
+      display1.updateDigit(1, unidades_de_dias, 255, 0, 0);
+      display1.updateDigit(2, dezenas_de_horas, 255, 0, 0);
+      display1.updateDigit(3, unidades_de_horas, 255, 0, 0);
+      display1.updateDigit(4, dezenas_de_minutos, 255, 0, 0);
+      display1.updateDigit(5, unidades_de_minutos, 255, 0, 0);
+      display1.updateDigit(6, dezenas_de_segundos, 255, 0, 0);
+      display1.updateDigit(7, unidades_de_segundos, 255, 0, 0);
+  } else if (DIGITS >= 6) {
+      display1.updateDigit(1, dezenas_de_horas, 255, 0, 0);
+      display1.updateDigit(2, unidades_de_horas, 255, 0, 0);
+      display1.updateDigit(3, dezenas_de_minutos, 255, 0, 0);
+      display1.updateDigit(4, unidades_de_minutos, 255, 0, 0);
+      display1.updateDigit(5, dezenas_de_segundos, 255, 0, 0);
+      display1.updateDigit(6, unidades_de_segundos, 255, 0, 0);
+  } else if (DIGITS >= 3) {
       display1.updateDigit(1, unidades_de_minutos, 255, 0, 0);
       display1.updateDigit(2, dezenas_de_segundos, 255, 0, 0);
       display1.updateDigit(3, unidades_de_segundos, 255, 0, 0);
-  } else if (DIGITS > 1) {
+  } else if (DIGITS >= 2) {
       display1.updateDigit(1, dezenas_de_segundos, 255, 0, 0);
       display1.updateDigit(2, unidades_de_segundos, 255, 0, 0);
   } else {
