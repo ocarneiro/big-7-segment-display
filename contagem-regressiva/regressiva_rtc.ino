@@ -54,9 +54,9 @@ const boolean modo_debug = false;
 long contagem;
 long contagem_inicial;
 
-RTC_DS1307 rtc; //Objeto rtc da classe DS1307
+RTC_DS3231 rtc; //Objeto rtc da classe
 
-const DateTime data_alvo = DateTime(2019, 10, 24, 23, 07, 50);
+const DateTime data_alvo = DateTime(2020, 10, 24, 23, 10, 50);
 
 void setup() {
 
@@ -82,9 +82,11 @@ void setup() {
 
 void loop() {
 
-  uint8_t dias = contagem / SEGUNDOS_EM_UM_DIA;
-  uint8_t dezenas_de_dias = dias / 10;
-  uint8_t unidades_de_dias = dias % 10;
+  int dias = contagem / SEGUNDOS_EM_UM_DIA;
+  uint8_t centenas_de_dias = dias / 100;
+  uint8_t dezenas_e_unid_dias = dias % 100;
+  uint8_t dezenas_de_dias = dezenas_e_unid_dias / 10;
+  uint8_t unidades_de_dias = dezenas_e_unid_dias % 10;
 
   long segundos_no_dia = contagem % SEGUNDOS_EM_UM_DIA;
   uint8_t horas = segundos_no_dia / SEGUNDOS_EM_UMA_HORA;
@@ -100,7 +102,17 @@ void loop() {
   uint8_t dezenas_de_segundos = segundos / 10;
   uint8_t unidades_de_segundos = segundos % 10;
 
-  if (DIGITS > 7) {
+  if (DIGITS >= 9) {
+      display1.updateDigit(1, centenas_de_dias, 255, 0, 0);
+      display1.updateDigit(2, dezenas_de_dias, 255, 0, 0);
+      display1.updateDigit(3, unidades_de_dias, 255, 0, 0);
+      display1.updateDigit(4, dezenas_de_horas, 255, 0, 0);
+      display1.updateDigit(5, unidades_de_horas, 255, 0, 0);
+      display1.updateDigit(6, dezenas_de_minutos, 255, 0, 0);
+      display1.updateDigit(7, unidades_de_minutos, 255, 0, 0);
+      display1.updateDigit(8, dezenas_de_segundos, 255, 0, 0);
+      display1.updateDigit(9, unidades_de_segundos, 255, 0, 0);
+  } else if (DIGITS >= 8) {
       display1.updateDigit(1, dezenas_de_dias, 255, 0, 0);
       display1.updateDigit(2, unidades_de_dias, 255, 0, 0);
       display1.updateDigit(3, dezenas_de_horas, 255, 0, 0);
@@ -151,6 +163,7 @@ void loop() {
   if (modo_debug) {
     // Serial.println(segundos_no_dia);
     String texto = "Faltam: " 
+                 + String(centenas_de_dias)
                  + String(dezenas_de_dias) + String(unidades_de_dias) + " dias, "
                  + String(dezenas_de_horas) + String(unidades_de_horas) + " horas, "
                  + String(dezenas_de_minutos) + String(unidades_de_minutos) + " minutos e "
